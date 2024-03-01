@@ -1,7 +1,7 @@
 #ifndef QUEEN_H
 #define QUEEN_H
 
-class Queen : public Piece
+class Queen : public LinearPiece
 {
     private:
     public:
@@ -11,7 +11,7 @@ class Queen : public Piece
             name[2] = number;
             name[3] = '\0';
             position = pos;
-            player = team - '0';
+            player = team - 'a' + 1;
             moveStart = 0;
             moveEnd = 8;
         }

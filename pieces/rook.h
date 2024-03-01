@@ -1,7 +1,7 @@
 #ifndef ROOK_H
 #define ROOK_H
 
-class Rook : public Piece
+class Rook : public LinearPiece
 {
     private:
     public:
@@ -11,7 +11,7 @@ class Rook : public Piece
             name[2] = number;
             name[3] = '\0';
             position = pos;
-            player = team - '0';
+            player = team - 'a' + 1;
             moveStart = 0;
             moveEnd = 4;
         }

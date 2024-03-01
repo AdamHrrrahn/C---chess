@@ -1,7 +1,7 @@
 #ifndef BISHOP_H
 #define BISHOP_H
 
-class Bishop : public Piece
+class Bishop : public LinearPiece
 {
     private:
     public:
@@ -11,7 +11,7 @@ class Bishop : public Piece
             name[2] = number;
             name[3] = '\0';
             position = pos;
-            player = team - '0';
+            player = team - 'a' + 1;
             moveStart = 4;
             moveEnd = 8;
         }

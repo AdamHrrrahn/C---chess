@@ -10,43 +10,42 @@ class Pawn : public Piece
             name[2] = number;
             name[3] = '\0';
             position = pos;
-            player = team - '0';
+            player = team - 'a' + 1;
         }
-        bool updateMoves(Board board, vector <Piece> p1list, vector <Piece> p2list, int turn, bool threatBoard[8][8]){
-            // char oppose = ((player % 2) + 1) + '0';
+        virtual bool updateMoves(Board board, vector <shared_ptr <Piece>> p1list, vector <shared_ptr <Piece>> p2list, int turn, bool threatBoard[8][8]){
             bool checking = false;
             if (player == 1)
             {
-                if (position.y < 7)
+                if (position.x < 7)
                 {
-                    if (board.array[position.x][position.y+1].getName()[0] == 'd')
+                    if (board.array[position.x+1][position.y]->getName()[0] == 'd')
                     {
-                        possibleMoves.push_back(Coords(position.x,position.y+1));
-                        if (position.y < 6)
+                        possibleMoves.push_back(Coords(position.x+1,position.y));
+                        if (position.x == 1)
                         {   
-                            if (board.array[position.x][position.y+2].getName()[0] == 'd')
+                            if (board.array[position.x+2][position.y]->getName()[0] == 'd')
                             {                
-                                possibleMoves.push_back(Coords(position.x,position.y+2));
+                                possibleMoves.push_back(Coords(position.x+2,position.y));
                             }
                         }
                     }
-                    if (position.x > 0)
+                    if (position.y > 0)
                     {
-                        if (board.array[position.x-1][position.y+1].getName()[1] == '2')
+                        if (board.array[position.x+1][position.y-1]->getName()[1] == 'b')
                         {
-                            possibleMoves.push_back(Coords(position.x-1,position.y+1));
-                            if (board.array[position.x-1][position.y+1].getName()[0] == 'K')
+                            possibleMoves.push_back(Coords(position.x+1,position.y-1));
+                            if (board.array[position.x+1][position.y-1]->getName()[0] == 'K')
                             {
                                 checking = true;
                             }
                         }
                     }
-                    if (position.x < 7)
+                    if (position.y < 7)
                     {
-                        if (board.array[position.x+1][position.y+1].getName()[1] == '2')
+                        if (board.array[position.x+1][position.y+1]->getName()[1] == 'b')
                         {
                             possibleMoves.push_back(Coords(position.x+1,position.y+1));
-                            if (board.array[position.x+1][position.y+1].getName()[0] == 'K')
+                            if (board.array[position.x+1][position.y+1]->getName()[0] == 'K')
                             {
                                 checking = true; 
                             }
@@ -56,37 +55,37 @@ class Pawn : public Piece
             }
             else
             {
-                if (position.y > 0)
+                if (position.x > 0)
                 {
-                    if (board.array[position.x][position.y-1].getName()[0] == 'd')
+                    if (board.array[position.x-1][position.y]->getName()[0] == 'd')
                     {
-                        possibleMoves.push_back(Coords(position.x,position.y-1));
-                        if (position.y > 1)
+                        possibleMoves.push_back(Coords(position.x-1,position.y));
+                        if (position.x == 6)
                         {   
-                            if (board.array[position.x][position.y-2].getName()[0] == 'd')
+                            if (board.array[position.x-2][position.y]->getName()[0] == 'd')
                             {                
-                                possibleMoves.push_back(Coords(position.x,position.y-2));
+                                possibleMoves.push_back(Coords(position.x-2,position.y));
                             }
                         }
                     }
-                    if (position.x > 0)
+                    if (position.y > 0)
                     {
-                        if (board.array[position.x-1][position.y-1].getName()[1] == '1')
+                        if (board.array[position.x-1][position.y-1]->getName()[1] == 'a')
                         {
                             possibleMoves.push_back(Coords(position.x-1,position.y-1));
-                            if (board.array[position.x-1][position.y-1].getName()[0] == 'K')
+                            if (board.array[position.x-1][position.y-1]->getName()[0] == 'K')
                             {
                                 checking = true;
                             }
                         }
 
                     }
-                    if (position.x < 7)
+                    if (position.y < 7)
                     {
-                        if (board.array[position.x+1][position.y-1].getName()[1] == '1')
+                        if (board.array[position.x-1][position.y+1]->getName()[1] == 'a')
                         {
-                            possibleMoves.push_back(Coords(position.x+1,position.y-1));
-                            if (board.array[position.x+1][position.y-1].getName()[0] == 'K')
+                            possibleMoves.push_back(Coords(position.x-1,position.y+1));
+                            if (board.array[position.x-1][position.y+1]->getName()[0] == 'K')
                             {
                                 checking = true;
                             }

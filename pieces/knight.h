@@ -1,6 +1,7 @@
 #ifndef KNIGHT_H
 #define KNIGHT_H
 
+
 class Knight : public Piece
 {
     private:
@@ -11,9 +12,9 @@ class Knight : public Piece
             name[2] = number;
             name[3] = '\0';
             position = pos;
-            player = team - '0';
+            player = team - 'a' + 1;
         }
-        bool updateMoves(Board board, vector <Piece> p1list, vector <Piece> p2list, int turn, bool threatBoard[8][8]){
+        virtual bool updateMoves(Board board, vector <shared_ptr <Piece>> p1list, vector <shared_ptr <Piece>> p2list, int turn, bool threatBoard[8][8]){
             bool checking = false;
             if (position.x > 1) {
                 if (position.y < 7){
@@ -22,15 +23,15 @@ class Knight : public Piece
                     Coords target = Coords(x, y);
                     switch (turn){               
                         case 1:
-                            p2list[0].cheackAndRemoveMove(target);
+                            p2list[0]->cheackAndRemoveMove(target);
                             break;
                         case 2:
-                            p1list[0].cheackAndRemoveMove(target);
+                            p1list[0]->cheackAndRemoveMove(target);
                             break;
                     }
-                    if (board.array[x][y].getName()[1] != name[1]){
+                    if (board.array[x][y]->getName()[1] != name[1]){
                         possibleMoves.push_back(target);
-                        if (board.array[x][y].getName()[0] == 'K'){
+                        if (board.array[x][y]->getName()[0] == 'K'){
                             checking = true;
                         }
                     }                    
@@ -39,17 +40,17 @@ class Knight : public Piece
                     int x = position.x - 2;
                     int y = position.y - 1;
                     Coords target = Coords(x, y);
-                    switch (turn){               
+                    switch (turn){
                         case 1:
-                            p2list[0].cheackAndRemoveMove(target);
+                            p2list[0]->cheackAndRemoveMove(target);
                             break;
                         case 2:
-                            p1list[0].cheackAndRemoveMove(target);
+                            p1list[0]->cheackAndRemoveMove(target);
                             break;
                     }
-                    if (board.array[x][y].getName()[1] != name[1]){
+                    if (board.array[x][y]->getName()[1] != name[1]){
                         possibleMoves.push_back(target);
-                        if (board.array[x][y].getName()[0] == 'K'){
+                        if (board.array[x][y]->getName()[0] == 'K'){
                             checking = true;
                         }
                     }     
@@ -60,17 +61,17 @@ class Knight : public Piece
                     int x = position.x + 2;
                     int y = position.y + 1;
                     Coords target = Coords(x, y);
-                    switch (turn){               
+                    switch (turn){  
                         case 1:
-                            p2list[0].cheackAndRemoveMove(target);
+                            p2list[0]->cheackAndRemoveMove(target);
                             break;
                         case 2:
-                            p1list[0].cheackAndRemoveMove(target);
+                            p1list[0]->cheackAndRemoveMove(target);
                             break;
                     }
-                    if (board.array[x][y].getName()[1] != name[1]){
+                    if (board.array[x][y]->getName()[1] != name[1]){
                         possibleMoves.push_back(target);
-                        if (board.array[x][y].getName()[0] == 'K'){
+                        if (board.array[x][y]->getName()[0] == 'K'){
                             checking = true;
                         }
                     }                    
@@ -81,15 +82,15 @@ class Knight : public Piece
                     Coords target = Coords(x, y);
                     switch (turn){               
                         case 1:
-                            p2list[0].cheackAndRemoveMove(target);
+                            p2list[0]->cheackAndRemoveMove(target);
                             break;
                         case 2:
-                            p1list[0].cheackAndRemoveMove(target);
+                            p1list[0]->cheackAndRemoveMove(target);
                             break;
                     }
-                    if (board.array[x][y].getName()[1] != name[1]){
+                    if (board.array[x][y]->getName()[1] != name[1]){
                         possibleMoves.push_back(target);
-                        if (board.array[x][y].getName()[0] == 'K'){
+                        if (board.array[x][y]->getName()[0] == 'K'){
                             checking = true;
                         }
                     }     
@@ -102,15 +103,15 @@ class Knight : public Piece
                     Coords target = Coords(x, y);
                     switch (turn){               
                         case 1:
-                            p2list[0].cheackAndRemoveMove(target);
+                            p2list[0]->cheackAndRemoveMove(target);
                             break;
                         case 2:
-                            p1list[0].cheackAndRemoveMove(target);
+                            p1list[0]->cheackAndRemoveMove(target);
                             break;
                     }
-                    if (board.array[x][y].getName()[1] != name[1]){
+                    if (board.array[x][y]->getName()[1] != name[1]){
                         possibleMoves.push_back(target);
-                        if (board.array[x][y].getName()[0] == 'K'){
+                        if (board.array[x][y]->getName()[0] == 'K'){
                             checking = true;
                         }
                     }                    
@@ -121,15 +122,15 @@ class Knight : public Piece
                     Coords target = Coords(x, y);
                     switch (turn){               
                         case 1:
-                            p2list[0].cheackAndRemoveMove(target);
+                            p2list[0]->cheackAndRemoveMove(target);
                             break;
                         case 2:
-                            p1list[0].cheackAndRemoveMove(target);
+                            p1list[0]->cheackAndRemoveMove(target);
                             break;
                     }
-                    if (board.array[x][y].getName()[1] != name[1]){
+                    if (board.array[x][y]->getName()[1] != name[1]){
                         possibleMoves.push_back(target);
-                        if (board.array[x][y].getName()[0] == 'K'){
+                        if (board.array[x][y]->getName()[0] == 'K'){
                             checking = true;
                         }
                     }     
@@ -142,15 +143,15 @@ class Knight : public Piece
                     Coords target = Coords(x, y);
                     switch (turn){               
                         case 1:
-                            p2list[0].cheackAndRemoveMove(target);
+                            p2list[0]->cheackAndRemoveMove(target);
                             break;
                         case 2:
-                            p1list[0].cheackAndRemoveMove(target);
+                            p1list[0]->cheackAndRemoveMove(target);
                             break;
                     }
-                    if (board.array[x][y].getName()[1] != name[1]){
+                    if (board.array[x][y]->getName()[1] != name[1]){
                         possibleMoves.push_back(target);
-                        if (board.array[x][y].getName()[0] == 'K'){
+                        if (board.array[x][y]->getName()[0] == 'K'){
                             checking = true;
                         }
                     }                    
@@ -161,15 +162,15 @@ class Knight : public Piece
                     Coords target = Coords(x, y);
                     switch (turn){               
                         case 1:
-                            p2list[0].cheackAndRemoveMove(target);
+                            p2list[0]->cheackAndRemoveMove(target);
                             break;
                         case 2:
-                            p1list[0].cheackAndRemoveMove(target);
+                            p1list[0]->cheackAndRemoveMove(target);
                             break;
                     }
-                    if (board.array[x][y].getName()[1] != name[1]){
+                    if (board.array[x][y]->getName()[1] != name[1]){
                         possibleMoves.push_back(target);
-                        if (board.array[x][y].getName()[0] == 'K'){
+                        if (board.array[x][y]->getName()[0] == 'K'){
                             checking = true;
                         }
                     }     

@@ -1,6 +1,7 @@
 #ifndef DIRECTIONS_H
 #define DIRECTIONS_H
 
+
 class Directions
 {
     public:
@@ -27,7 +28,7 @@ class Directions
         int modifiers[8][2];
         int directions[8];
         bool isNDone(){
-            for(int i = 0; i < 8; i++){if(directions[i]) return true;}
+            for(int i = 0; i < 8; i++){if(directions[i] > 0) return true;}
             return false;
         }
 };
