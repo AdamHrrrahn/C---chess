@@ -264,7 +264,7 @@ loadResults loadGame()
                         p2list.push_back(newPiece);
                     break;
                 }
-                case 'p':
+                case 'P':
                 {
                     shared_ptr <Piece> newPiece(new Pawn(name[1], name[2], Coords(x, y)));
                     loadBoard.array[x][y] = newPiece;
