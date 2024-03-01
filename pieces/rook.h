@@ -1,3 +1,6 @@
+#ifndef ROOK_H
+#define ROOK_H
+
 class Rook : public Piece
 {
     private:
@@ -9,6 +12,8 @@ class Rook : public Piece
             name[3] = '\0';
             position = pos;
             player = team - '0';
+            moveStart = 0;
+            moveEnd = 4;
         }
-        bool updateMoves(Board board, vector <Piece> p1list, vector <Piece> p2list){};
 };
+#endif

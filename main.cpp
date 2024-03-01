@@ -3,18 +3,20 @@
 #include<fstream>
 #include<vector>
 
-#include "pieces/pieceClass.h"
+#include "pieces/coords.h"
+#include "pieces/directions.h"
+#include "pieces/piece.h"
+// #include "pieces/board.h"
 #include "pieces/king.h"
 #include "pieces/queen.h"
 #include "pieces/rook.h"
 #include "pieces/bishop.h"
 #include "pieces/knight.h"
 #include "pieces/pawn.h"
-#include "pieces/board.h"
 using namespace std;
 
 
-Board board;
+Board board = Board();
 vector <Piece> p1list;
 vector <Piece> p2list;
 
@@ -38,12 +40,7 @@ int intro()
 
 Board newBoard()
 {
-    Board newBoard;
-    for (int i = 0; i < 8; i++){
-        for (int j = 0; j < 8; j++){
-            newBoard.array[i][j] = Piece();
-        }
-    }
+    Board newBoard = Board();
     King Ka1('a', '1', Coords(0, 3));
     newBoard.array[0][3] = Ka1;
     p1list.push_back(Ka1);
@@ -146,12 +143,7 @@ Board newBoard()
 
 Board loadGame()
 {
-    Board loadBoard;
-    for (int i = 0; i < 8; i++){
-        for (int j = 0; j < 8; j++){
-            loadBoard.array[i][j] = Piece();
-        }
-    }
+    Board loadBoard = Board();
     cout << "please enter file name\n";
     string filename;
     cin >> filename;
@@ -305,117 +297,199 @@ void display()
 int updateMovesPossible(int turn)
 {
     int winner = 0;
-    bool p1Loss = true;
-    bool p1check = false;
-    bool p2Loss = true;
-    bool p2check = false;
+    // bool Loss = true;
+    bool check = false;
     bool threatBoard[8][8];
+    // reset moves and threat
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
             threatBoard[i][j] = false;
         }
     }
-    // check current player's king's moves
-
-    // check opposing player's pieces moves
-
-    //check remaining current player pieces moves
-
-    // for (int i = 0; i < 8; i++)
-    // {
-    //     for (int j = 0; j < 8; j++)
-    //     {
-    //         if (board.array[i][j].updateMoves(board))
-    //         {
-    //             if (board.array[i][j].getName()[1] == 'a')
-    //                 p1check = true
-    //         }                
-    //     }
-    // }
-    // for (int i = 0; i < 8; i++)
-    // {
-    //     for (int j = 0; j < 8; j++)
-    //     {
-    //         board.array[i][j].updateMoves(board, p1list, p2list);
-    //     }
-    // }
-    // for (int i = 0; i < 8; i++)
-    // {
-    //     for (int j = 0; j < 8; j++)
-    //     {
-    //         board.array[i][j].checkProtecting();
-
-    //     }
-    // }
+    for (int i = 0; i < p1list.size(); i++){
+        p1list[i].clear();
+    }
+    for (int i = 0; i < p2list.size(); i++){
+        p2list[i].clear();
+    }
+    
+    switch (turn){
+        case 1:
+            for (int i = 0; i < p1list.size(); i++){
+                p1list[i].updateMoves(board, p1list, p2list, turn, threatBoard);
+            }
+            for (int i = 0; i < p2list.size(); i++){
+                if (p2list[i].updateMoves(board, p1list, p2list, turn, threatBoard)){
+                    check = true;
+                }
+            }
+            if (check){
+                int moveCount = 0;          
+                for (int i = 0; i < p1list.size(); i++){
+                    moveCount += p1list[i].pareMoves(threatBoard);
+                }
+                if (moveCount == 0){
+                    winner = 2;
+                }
+            }
+            break;
+        case 2:
+            for (int i = 0; i < p2list.size(); i++){
+                p1list[i].updateMoves(board, p1list, p2list, turn, threatBoard);
+            }
+            for (int i = 0; i < p1list.size(); i++){
+                if (p2list[i].updateMoves(board, p1list, p2list, turn, threatBoard)){
+                    check = true;
+                }
+            }
+            if (check){
+                int moveCount = 0;          
+                for (int i = 0; i < p2list.size(); i++){
+                    moveCount += p2list[i].pareMoves(threatBoard);
+                }
+                if (moveCount == 0){
+                    winner = 1;
+                }
+            }
+            break;
+        default:
+            cout << "Fatal Error: turn counter corrupted\n";
+            assert(false);
+    }
     return winner;
 }
 
 int move(const int turn)
 {
     bool validSelection = false;
-    cout << "Select piece or type 'c' for cancel\n";
+    cout << "Select a piece from the following list, or type 'C' for cancel. use only upper case letters.\n";
     Coords coordinates;
     char turnC;
-    vector <Piece> turnList;
+    vector <Coords> moveList;
+    int pieceListSize;
+    vector <string> pieces;
+    vector <bool> validPieces;
     switch (turn)
     {
         case 1:
-            turnC = 'a';
-            turnList = p1list;
+            // turnC = 'a';
+            pieceListSize = p1list.size();
+            for (int i = 0; i < pieceListSize; i++){
+                pieces.push_back(p1list[i].getName());
+                validPieces.push_back(p1list[i].getMoves().size());
+            }
             break;
         case 2:
-            turnC = 'b';
-            turnList = p2list;
+            // turnC = 'b';
+            pieceListSize = p2list.size();
+            for (int i = 0; i < pieceListSize; i++){
+                validPieces.push_back(p2list[i].getMoves().size() > 0);
+                pieces.push_back(p2list[i].getName());
+            }
             break;
         default:
             cout << "Fatal Error: turn counter corrupted\n";
             assert(false);
     }
-    //receive input and vrify it is valid
+    //receive input and verify it is valid
+    for (int i = 0 ; i < pieceListSize; i++){
+        if (validPieces[i])
+            cout << "\t" << pieces[i] << endl;
+    }
+    int inInt = 0;
     while (! validSelection)
     {
         string input;
         cin >> input;
-        if (input[0] == 'c')
+        if (input[0] == 'C') {
             return -1;
-        else if (input[1] != turnC)
-            cout << "Please choose one of your own pieces\n";
-        else if (input[3])
-            cout << "please enter valid piece\n";
-        else
-        {
-            for (int i = 0; i < turnList.size(); i++)
-            {
-                string name = turnList[i].getName();              
-                bool valid = true;
-                for (int k = 0; k < 3; k++)
-                {
-                    if (name[k] != input[k])
-                        valid = false;
-                        break;
-                }
-                if (valid)
-                {
-                    // coordinates = turnList[i].getCoords();
+        } else {
+            for (int i = 0 ; i < pieceListSize; i++){
+                if (pieces[i] == input)
                     validSelection = true;
-                    break;  
-                }
+                    inInt = i;
+                    break;
             }
         }
         if(! validSelection)
-            cout << "please enter valid piece\n";
+            cout << "please enter valid piece name, or the letter 'C' for cancel.\n";    
     }
-    cout << coordinates.x << ' ' << coordinates.y << endl;
+
+    switch (turn){
+    case 1:
+        moveList = p1list[inInt].getMoves();
+        coordinates = p1list[inInt].getCoords();
+        break;
+    case 2:
+        moveList = p2list[inInt].getMoves();
+        coordinates = p2list[inInt].getCoords();
+        break;
+    }
+    // cout << coordinates.x << ' ' << coordinates.y << endl;
 
     //Dipslay possible moves
-
+    cout << "Please select the number of the move you would like to make for piece " << pieces[inInt] << ", Or enter C to go back to piece select.";
+    for (int i = 1; i <= moveList.size(); i++){
+        cout << "\t" << i << ". " << moveList[i-1].x << " " << moveList[i-1].y << endl;
+    }
     //receive input and verify it is valid 
+    validSelection = false;
+    inInt = 0;
+    while (! validSelection){
+        string input;
+        cin >> input;
+        if (input[0] == 'C') {
+            return move(turn);
+        } else if (input.size() < 3){
+            inInt = 0;
+            int a = input[0] - '0';
+            if (!((a > 9) || (a < 0))){
+                inInt = a;
+                if (input.size() == 2){
+                    inInt *= 10;
+                    a = input[1] - '0';
+                    if (!((a > 9) || (a < 0))){
+                        inInt += a;
+                    } else {
+                        inInt = -1;
+                    }
+                }
+            }
+            inInt--;
+            if ((inInt > 0)&&(inInt < moveList.size()))
+                validSelection = true;
+        }
+        if(! validSelection)
+            cout << "please enter valid piece name, or the letter 'C' for cancel.\n";   
+    }
 
-    // Coords targetCoords;
     // move piece
-    // board.array[coordinates.x][coordinates.y].setCoords(targetCoords);
-    // board.array[targetCoords.x][targetCoords.y] = board.array[coordinates.x][coordinates.y];
-    // board.array[coordinates.x][coordinates.y] = Piece();
+    Coords target = moveList[inInt];
+    if (board.array[target.x][target.y].getName()[0] != 'd'){
+        switch (turn)
+        {
+        case 1:
+            for (int i = 0; i < p2list.size(); i++){
+                if (board.array[target.x][target.y].getName() == p2list[i].getName()){
+                    p2list.erase(p2list.begin()+i);
+                    break;
+                }
+            }
+            break;        
+        case 2:
+            for (int i = 0; i < p1list.size(); i++){
+                if (board.array[target.x][target.y].getName() == p1list[i].getName()){
+                    p1list.erase(p1list.begin()+i);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    board.array[target.x][target.y] = board.array[coordinates.x][coordinates.y];
+    board.array[target.x][target.y].setCoords(target);
+    board.array[coordinates.x][coordinates.y] = Piece();
+
 
     return updateMovesPossible((turn % 2) + 1);
 }
@@ -473,7 +547,7 @@ void turnLoop()
 
 int main()
 {
-    Board board;
+    // Board board;
 
     switch (intro())
     {

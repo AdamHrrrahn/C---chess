@@ -1,3 +1,6 @@
+#ifndef BISHOP_H
+#define BISHOP_H
+
 class Bishop : public Piece
 {
     private:
@@ -9,6 +12,8 @@ class Bishop : public Piece
             name[3] = '\0';
             position = pos;
             player = team - '0';
+            moveStart = 4;
+            moveEnd = 8;
         }
-        bool updateMoves(Board board, vector <Piece> p1list, vector <Piece> p2list){};
 };
+#endif
