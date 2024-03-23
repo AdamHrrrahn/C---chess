@@ -2,7 +2,7 @@
 #include<cassert>
 #include<fstream>
 #include<vector>
-#include <memory>
+#include<memory>
 
 #include "pieces/coords.h"
 #include "pieces/directions.h"
@@ -177,34 +177,12 @@ loadResults loadGame()
         result.loadBoard = newBoard();
         return result;
     }
-    // while (fin.fail())
-    // {
-        // cout << "Error: Unable to open file, please enter valid file path or type 'new game' to start a new game\n";
-        // cin >> filename;
-        // bool newg = true;
-        // string newString = "new game"
-        // if (filename[8] = NULL)
-        // {
-        //     for (int i = 0; i < 8){
-        //         if (filename[i] != newString[i])
-        //             newg = false;
-        //     }
-        // }
-        // else {newg = false}
-        // if (newg) {return newBoard()};
-        // ifstream fin(filename)
-    // }
     fin >> result.turn;
     string data;
     string name;
-    // string place;
     int num = 0;
     int x;
     int y;
-    // for (int i = 0; i < 8; i++)
-    // {
-    //     for (int j = 0; j < 8; j++)
-    //     {
     while(fin >> data){
         if (num == 0){
             name = data;
@@ -332,7 +310,6 @@ void display()
 int updateMovesPossible(int turn)
 {
     int winner = 0;
-    // bool Loss = true;
     bool check = false;
     bool threatBoard[8][8];
     // reset moves and threat
@@ -347,7 +324,7 @@ int updateMovesPossible(int turn)
     for (int i = 0; i < p2list.size(); i++){
         p2list[i]->clear();
     }
-    
+    int moveCount = 0;
     switch (turn){
         case 1:
             for (int i = 0; i < p1list.size(); i++){
@@ -359,7 +336,6 @@ int updateMovesPossible(int turn)
                 }
             }
             if (check){
-                int moveCount = 0;          
                 for (int i = 0; i < p1list.size(); i++){
                     moveCount += p1list[i]->pareMoves(threatBoard);
                 }
@@ -374,14 +350,15 @@ int updateMovesPossible(int turn)
             }
             for (int i = 0; i < p1list.size(); i++){
                 if (p1list[i]->updateMoves(board, p1list, p2list, turn, threatBoard)){
+                    cout << "checked\n";
                     check = true;
                 }
             }
+            cout << "check " << check << " turn " << turn << endl;
+            for (int i = 0; i < p2list.size(); i++){
+                moveCount += p2list[i]->pareMoves(threatBoard);
+            }
             if (check){
-                int moveCount = 0;          
-                for (int i = 0; i < p2list.size(); i++){
-                    moveCount += p2list[i]->pareMoves(threatBoard);
-                }
                 if (moveCount == 0){
                     winner = 1;
                 }
@@ -407,7 +384,6 @@ int move(const int turn)
     switch (turn)
     {
         case 1:
-            // turnC = 'a';
             pieceListSize = p1list.size();
             for (int i = 0; i < pieceListSize; i++){
                 pieces.push_back(p1list[i]->getName());
@@ -415,7 +391,6 @@ int move(const int turn)
             }
             break;
         case 2:
-            // turnC = 'b';
             pieceListSize = p2list.size();
             for (int i = 0; i < pieceListSize; i++){
                 validPieces.push_back(p2list[i]->getMoves().size() > 0);

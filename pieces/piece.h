@@ -2,7 +2,7 @@
 #define PIECE_H
 
 #include<vector>
-#include <memory>
+#include<memory>
 using namespace::std;
 
 class Piece;

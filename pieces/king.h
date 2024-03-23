@@ -16,7 +16,7 @@ class King : public Piece
             player = team - 'a' + 1;
         }
         virtual bool updateMoves(Board board, vector <shared_ptr <Piece>> p1list, vector <shared_ptr <Piece>> p2list, int turn, bool threatBoard[8][8]){
-            Directions dir = Directions(1, 0, 8);
+            Directions dir = Directions(0, 8);
             for(int i = 0; i < 8; i++){
                 int x = dir.modifiers[i][0] + position.x;
                 int y = dir.modifiers[i][1] + position.y;
